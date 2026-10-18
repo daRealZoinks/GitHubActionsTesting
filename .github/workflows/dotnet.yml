@@ -5,14 +5,14 @@ name: .NET
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "staging", "dev" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "staging", "dev" ]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: [ ubuntu-latest, windows-latest ]
 
     steps:
     - uses: actions/checkout@v4

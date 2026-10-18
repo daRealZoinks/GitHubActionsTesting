@@ -2,13 +2,6 @@
 {
     public class CalculatorTests
     {
-        private readonly Calculator _sut;
-
-        public CalculatorTests()
-        {
-            _sut = new Calculator();
-        }
-
         [Theory]
         [InlineData(1, 1, 2)]
         [InlineData(2, 4, 6)]
@@ -16,7 +9,7 @@
         [InlineData(2, -4, -2)]
         public void Add_WhenTwoNumbers_ReturnNumber(int a, int b, int c)
         {
-            var result = _sut.Add(a, b);
+            var result = Calculator.Add(a, b);
 
             Assert.Equal(c, result);
         }
@@ -28,7 +21,7 @@
         [InlineData(2, -4, 6)]
         public void Subtract_WhenTwoNumbers_ReturnNumber(int a, int b, int c)
         {
-            var result = _sut.Subtract(a, b);
+            var result = Calculator.Subtract(a, b);
 
             Assert.Equal(c, result);
         }
