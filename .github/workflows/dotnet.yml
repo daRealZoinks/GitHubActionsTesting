@@ -12,17 +12,22 @@ on:
 jobs:
   build:
 
-    runs-on: [ ubuntu-latest, windows-latest ]
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
+    - name: Checkout Source Code 
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Restore dependencies
+
+    - name: Restore project dependencies
       run: dotnet restore
-    - name: Build
+
+    - name: Build project
       run: dotnet build --no-restore
-    - name: Test
+
+    - name: Run Tests
       run: dotnet test --no-build --verbosity normal
