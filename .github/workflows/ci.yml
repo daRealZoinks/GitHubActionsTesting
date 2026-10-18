@@ -1,21 +1,16 @@
-name: .NET
+name: Calculator CI
 
 on:
-  push:
-    branches: [ "master", "staging", "dev" ]
   pull_request:
     branches: [ "master", "staging", "dev" ]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     env:
-      CONFIG: ${{ (github.ref_name == 'dev' || github.base_ref == 'dev') && 'Debug' || 'Release' }}
+      CONFIG: ${{ github.base_ref == 'dev' && 'Debug' || 'Release' }}
 
     steps:
     - name: Checkout Source Code
@@ -29,8 +24,8 @@ jobs:
     - name: Restore project dependencies
       run: dotnet restore
 
-    - name: Build project
+    - name: Build Calculator
       run: dotnet build --configuration ${{ env.CONFIG }} --no-restore
 
-    - name: Run Tests
+    - name: Test Calculator
       run: dotnet test --configuration ${{ env.CONFIG }} --no-build --verbosity normal
