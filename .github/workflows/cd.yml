@@ -1,0 +1,41 @@
+name: Calculator CD
+
+on:
+  push:
+    branches: [ "staging", "master" ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Publish Calculator
+      run: |
+        dotnet publish ./GitHubActionsTesting/GitHubActionsTesting.csproj \
+          --configuration Release \
+          --runtime win-x64 \
+          --output ./publish \
+          --self-contained true \
+          --property:PublishSingleFile=true \
+          --property:PublishTrimmed=true
+
+    - name: Package Calculator
+      run: |
+        cd ./publish
+        zip -r ../calculator-${{ github.ref_name }}-win-x64.zip .
+
+    - name: Upload Calculator Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: calculator-${{ github.ref_name }}-win-x64
+        path: calculator-${{ github.ref_name }}-win-x64.zip
+        if-no-files-found: error
+        retention-days: 30

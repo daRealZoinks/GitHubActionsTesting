@@ -1,0 +1,31 @@
+name: Calculator CI
+
+on:
+  pull_request:
+    branches: [ "master", "staging", "dev" ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      CONFIG: ${{ github.base_ref == 'dev' && 'Debug' || 'Release' }}
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore project dependencies
+      run: dotnet restore
+
+    - name: Build Calculator
+      run: dotnet build --configuration ${{ env.CONFIG }} --no-restore
+
+    - name: Test Calculator
+      run: dotnet test --configuration ${{ env.CONFIG }} --no-build --verbosity normal
